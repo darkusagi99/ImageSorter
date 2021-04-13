@@ -84,6 +84,7 @@ namespace ImageSorter
             this.buttonLaunch.TabIndex = 4;
             this.buttonLaunch.Text = "Lancer";
             this.buttonLaunch.UseVisualStyleBackColor = true;
+            this.buttonLaunch.Click += new System.EventHandler(this.buttonLaunch_Click);
             // 
             // textBoxLogs
             // 
