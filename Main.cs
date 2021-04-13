@@ -107,10 +107,12 @@ namespace ImageSorter
 
                         // TODO - Si fichier cache -> Confirmation cache (contrôle fichier source) et pas de copie
                         if (currentFilename.StartsWith(".")) {
-                            String compareFileName = currentFilename.Substring(2);
-                            String compareFilePath = "";
+                            String compareFileName = currentFilename[3..];
+                            String compareFilePath = Path.GetDirectoryName(currentFilePath) + "\\" + compareFileName;
 
-                            File.Exists(compareFilePath);
+                            if (! File.Exists(compareFilePath)) {
+                                File.Copy(currentFilePath, targetPath);
+                            }
 
                         } else {
                             // TODO - Sinon, copie du fichier
