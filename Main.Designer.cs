@@ -91,8 +91,10 @@ namespace ImageSorter
             this.textBoxLogs.Location = new System.Drawing.Point(23, 159);
             this.textBoxLogs.Multiline = true;
             this.textBoxLogs.Name = "textBoxLogs";
+            this.textBoxLogs.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxLogs.Size = new System.Drawing.Size(555, 122);
             this.textBoxLogs.TabIndex = 5;
+            this.textBoxLogs.TextChanged += new System.EventHandler(this.textBoxLogs_TextChanged);
             // 
             // Main
             // 
