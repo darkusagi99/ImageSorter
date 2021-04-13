@@ -24,15 +24,28 @@ namespace ImageSorter
 
         private void sourceDirBtn_Click(object sender, EventArgs e)
         {
+            // Ouverture fenetre dialogue
+            DialogResult dialogResult = folderBrowserDialogSrc.ShowDialog();
 
+            // Si OK, MAJ de la valeur
+            if (dialogResult.Equals(DialogResult.OK)) {
+                textBoxSrc.Text = folderBrowserDialogSrc.SelectedPath;
+            }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonDirTarget_Click(object sender, EventArgs e)
         {
+            // Ouverture de la fenetre dialogue
+            DialogResult dialogResult = folderBrowserDialogTarget.ShowDialog();
 
+            // Si OK, MAJ de la valeur
+            if (dialogResult.Equals(DialogResult.OK))
+            {
+                textBoxTarget.Text = folderBrowserDialogTarget.SelectedPath;
+            }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void textBoxTarget_TextChanged(object sender, EventArgs e)
         {
 
         }

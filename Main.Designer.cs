@@ -64,7 +64,7 @@ namespace ImageSorter
             this.textBoxTarget.Name = "textBoxTarget";
             this.textBoxTarget.Size = new System.Drawing.Size(555, 27);
             this.textBoxTarget.TabIndex = 2;
-            this.textBoxTarget.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBoxTarget.TextChanged += new System.EventHandler(this.textBoxTarget_TextChanged);
             // 
             // buttonTarget
             // 
@@ -74,7 +74,7 @@ namespace ImageSorter
             this.buttonTarget.TabIndex = 3;
             this.buttonTarget.Text = "buttonTarget";
             this.buttonTarget.UseVisualStyleBackColor = true;
-            this.buttonTarget.Click += new System.EventHandler(this.button1_Click);
+            this.buttonTarget.Click += new System.EventHandler(this.buttonDirTarget_Click);
             // 
             // buttonLaunch
             // 
