@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,19 +56,29 @@ namespace ImageSorter
             // Méthode principale du tri des photos
 
             // Contrôle des paramètres (les deux arborescences ne doivent pas se chevaucher) - Si c'est le cas : message d'erreur et arrêt
-            
+            if (!Directory.Exists(textBoxTarget.Text) ||
+                !Directory.Exists(textBoxSrc.Text) ||
+                textBoxSrc.Text.Contains(textBoxTarget.Text) ||
+                textBoxTarget.Text.Contains(textBoxSrc.Text)
+                )
+            {
+                // Affichage d'un message d'erreur
+                MessageBox.Show("Les répertoires sélectionnés ne sont pas valides", "Caption", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            }
+            else
+            {
 
-            // Boucle sur l'ensemble des fichiers de l'arborescence
+                // Boucle sur l'ensemble des fichiers de l'arborescence
 
-            // Pour chaque fichier :
-            // Si fichier image -> Contrôle de ses métadonnées et copie
-            // Si pas de métadonnées lisibles --> Copie dans un autre répertoire
+                // Pour chaque fichier :
+                // Si fichier image -> Contrôle de ses métadonnées et copie
+                // Si pas de métadonnées lisibles --> Copie dans un autre répertoire
 
-            // Si fichier doublon -> Logs et pas de copie
+                // Si fichier doublon -> Logs et pas de copie
 
-            // Si fichier cache -> Confirmation cache (contrôle fichier source) et pas de copie
+                // Si fichier cache -> Confirmation cache (contrôle fichier source) et pas de copie
 
-
+            }
         }
     }
 }
