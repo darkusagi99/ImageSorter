@@ -50,11 +50,11 @@ namespace ImageSorter
             // 
             // sourceDirBtn
             // 
+            this.sourceDirBtn.Image = global::ImageSorter.Properties.Resources.FolderBrowserDialogControl_16x;
             this.sourceDirBtn.Location = new System.Drawing.Point(595, 36);
             this.sourceDirBtn.Name = "sourceDirBtn";
-            this.sourceDirBtn.Size = new System.Drawing.Size(57, 26);
+            this.sourceDirBtn.Size = new System.Drawing.Size(30, 26);
             this.sourceDirBtn.TabIndex = 1;
-            this.sourceDirBtn.Text = "button1";
             this.sourceDirBtn.UseVisualStyleBackColor = true;
             this.sourceDirBtn.Click += new System.EventHandler(this.sourceDirBtn_Click);
             // 
@@ -68,11 +68,11 @@ namespace ImageSorter
             // 
             // buttonTarget
             // 
+            this.buttonTarget.Image = global::ImageSorter.Properties.Resources.FolderBrowserDialogControl_16x;
             this.buttonTarget.Location = new System.Drawing.Point(595, 94);
             this.buttonTarget.Name = "buttonTarget";
-            this.buttonTarget.Size = new System.Drawing.Size(94, 29);
+            this.buttonTarget.Size = new System.Drawing.Size(30, 29);
             this.buttonTarget.TabIndex = 3;
-            this.buttonTarget.Text = "buttonTarget";
             this.buttonTarget.UseVisualStyleBackColor = true;
             this.buttonTarget.Click += new System.EventHandler(this.buttonDirTarget_Click);
             // 

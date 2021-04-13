@@ -59,5 +59,15 @@ namespace ImageSorter.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FolderBrowserDialogControl_16x {
+            get {
+                object obj = ResourceManager.GetObject("FolderBrowserDialogControl_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
