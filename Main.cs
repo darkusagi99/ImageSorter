@@ -23,6 +23,10 @@ namespace ImageSorter
         int duplicate = 0;
         int ignored = 0;
 
+        // Fichiers à ignorer systématiquement
+        static readonly String ignoreStore = ".DS_Store";
+        static readonly String ignoreStoreAlt = "._.DS_Store";
+
 
         public Main()
         {
@@ -124,16 +128,29 @@ namespace ImageSorter
 
                         // TODO - Si fichier cache -> Confirmation cache (contrôle fichier source) et pas de copie
                         if (currentFilename.StartsWith(".")) {
-                            String compareFileName = currentFilename[3..];
-                            String compareFilePath = Path.GetDirectoryName(currentFilePath) + "\\" + compareFileName;
 
-                            if (!File.Exists(compareFilePath))
+                            bool ignoreFile = false;
+
+                            if (currentFilename.Equals(ignoreStore) || currentFilename.Equals(ignoreStoreAlt))
+                            {
+                                ignoreFile = true;
+                            }
+                            else
+                            {
+
+                                String compareFileName = currentFilename[2..];
+                                String compareFilePath = Path.GetDirectoryName(currentFilePath) + "\\" + compareFileName;
+                                ignoreFile = File.Exists(compareFilePath);
+                            }
+
+                            if (ignoreFile)
+                            {
+                                ignored++;
+                            }
+                            else
                             {
                                 secureCopyFile(currentFilePath, targetDirectory, currentFilename);
                                 copied++;
-                            }
-                            else {
-                                ignored++;
                             }
 
                         } else {
