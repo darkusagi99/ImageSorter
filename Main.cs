@@ -110,6 +110,7 @@ namespace ImageSorter
                     // Contrôle si le fichier doit être ignoré
                     if (fileToIgnore(currentFilename, currentFilePath)) {
                         ignored++;
+                        processed++;
                         continue;
                     }
 
@@ -129,7 +130,14 @@ namespace ImageSorter
 
                         // TODO - Si fichier doublon -> Logs et pas de copie
                         // TODO - Si pas fichier doublon -> Changer le nom et copier 
-                        duplicate++;
+                        if (FileEquals(currentFilePath, targetPath))
+                        {
+                            duplicate++;
+                        } else
+                        {
+                            duplicate++;
+                        }
+
                     }
                     else
                     {
@@ -199,12 +207,11 @@ namespace ImageSorter
         // compare. A return value of 0 indicates that the contents of the files
         // are the same. A return value of any other value indicates that the
         // files are not the same.
-        private bool FileCompare(string file1, string file2)
+        private bool FileEquals(string file1, string file2)
         {
-            int file1byte;
-            int file2byte;
-            FileStream fs1;
-            FileStream fs2;
+
+            byte[] fileContent1 = File.ReadAllBytes(file1);
+            byte[] fileContent2 = File.ReadAllBytes(file2);
 
             // Determine if the same file was referenced two times.
             if (file1 == file2)
@@ -213,18 +220,11 @@ namespace ImageSorter
                 return true;
             }
 
-            // Open the two files.
-            fs1 = new FileStream(file1, FileMode.Open);
-            fs2 = new FileStream(file2, FileMode.Open);
 
             // Check the file sizes. If they are not the same, the files
             // are not the same.
-            if (fs1.Length != fs2.Length)
+            if (fileContent1.Length != fileContent2.Length)
             {
-                // Close the file
-                fs1.Close();
-                fs2.Close();
-
                 // Return false to indicate files are different
                 return false;
             }
@@ -232,22 +232,19 @@ namespace ImageSorter
             // Read and compare a byte from each file until either a
             // non-matching set of bytes is found or until the end of
             // file1 is reached.
-            do
+            for (int i = 0; i < fileContent1.Length; i++)
             {
-                // Read one byte from each file.
-                file1byte = fs1.ReadByte();
-                file2byte = fs2.ReadByte();
+                if (fileContent1[i] != fileContent2[i])
+                {
+                    return false;
+                }
             }
-            while ((file1byte == file2byte) && (file1byte != -1));
 
-            // Close the files.
-            fs1.Close();
-            fs2.Close();
 
             // Return the success of the comparison. "file1byte" is
             // equal to "file2byte" at this point only if the files are
             // the same.
-            return ((file1byte - file2byte) == 0);
+            return true;
         }
 
     }
