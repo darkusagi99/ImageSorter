@@ -15,6 +15,15 @@ namespace ImageSorter
 {
     public partial class Main : Form
     {
+
+        // Compteurs pour l'affichage du contenu
+        int total = 0;
+        int processed = 0;
+        int copied = 0;
+        int duplicate = 0;
+        int ignored = 0;
+
+
         public Main()
         {
             InitializeComponent();
@@ -76,11 +85,17 @@ namespace ImageSorter
                 // Mise en place d'une date par défaut
                 DateTime defaultDate = new DateTime(1900, 01, 01);
 
-                foreach(String currentFilePath in fileList) {
+                // Initialisation des compteurs
+                total = fileList.Length;
+                processed = 0;
+                copied = 0;
+                duplicate = 0;
+                ignored = 0;
+
+                foreach (String currentFilePath in fileList) {
 
                     // Affichage de chaque fichier traité
-                    textBoxLogs.AppendText(Environment.NewLine);
-                    textBoxLogs.AppendText(currentFilePath);
+                    buildBoxLogs();
 
                     // Pour chaque fichier :
                     ShellFile currentFile = ShellFile.FromFilePath(currentFilePath);
@@ -91,16 +106,18 @@ namespace ImageSorter
                     DateTime currentDate = currentFile.Properties.System.Photo.DateTaken.Value.GetValueOrDefault(defaultDate);
 
                     // Mise en place du chemin de copie et contrôles.
-                    String targetPath = textBoxTarget.Text + "\\" 
+
+                    String targetDirectory = textBoxTarget.Text + "\\"
                             + currentDate.Year.ToString() + "\\"
                             + currentDate.Month.ToString() + "\\"
-                            + currentDate.Day.ToString() + "\\"
-                            + currentFilename;
+                            + currentDate.Day.ToString();
+                    String targetPath = targetDirectory + "\\" + currentFilename;
 
                     if (File.Exists(targetPath)) {
 
                         // TODO - Si fichier doublon -> Logs et pas de copie
                         // TODO - Si pas fichier doublon -> Changer le nom et copier 
+                        duplicate++;
                     }
                     else
                     {
@@ -110,17 +127,24 @@ namespace ImageSorter
                             String compareFileName = currentFilename[3..];
                             String compareFilePath = Path.GetDirectoryName(currentFilePath) + "\\" + compareFileName;
 
-                            if (! File.Exists(compareFilePath)) {
-                                File.Copy(currentFilePath, targetPath);
+                            if (!File.Exists(compareFilePath))
+                            {
+                                secureCopyFile(currentFilePath, targetDirectory, currentFilename);
+                                copied++;
+                            }
+                            else {
+                                ignored++;
                             }
 
                         } else {
-                            // TODO - Sinon, copie du fichier
-                            File.Copy(currentFilePath, targetPath);
+                            // Sinon, copie du fichier
+                            secureCopyFile(currentFilePath, targetDirectory, currentFilename);
+                            copied++;
                         }
                     }
 
-
+                    // Incrément de compteur
+                    processed++;
                 }
 
             }
@@ -130,5 +154,29 @@ namespace ImageSorter
         {
 
         }
+
+        private void buildBoxLogs() {
+            String logEntry = "Total : " + total + Environment.NewLine +
+                "Traités : " + processed + Environment.NewLine +
+                "Copiés : " + copied + Environment.NewLine +
+                "Doublon : " + duplicate + Environment.NewLine +
+                "Ignorés : " + ignored + Environment.NewLine;
+
+            textBoxLogs.Text = logEntry;
+            textBoxLogs.Update();
+
+        }
+
+        private void secureCopyFile(String sourcePath, String targetPath, String filename) {
+
+            String definitiveCopyPath = targetPath + "\\" + filename;
+
+            if (! Directory.Exists(targetPath)) {
+                Directory.CreateDirectory(targetPath);
+            }
+
+            File.Copy(sourcePath, definitiveCopyPath);
+        }
+
     }
 }
