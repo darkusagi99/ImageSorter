@@ -24,10 +24,7 @@ namespace ImageSorter
         int ignored = 0;
 
         // Fichiers à ignorer systématiquement
-        static readonly String ignoreStore = ".DS_Store";
-        static readonly String ignoreStoreAlt = "._.DS_Store";
-
-        List<String> ignoreFileList = new List<String>() { ".DS_Store", "._.DS_Store", "desktop.ini", "Thumbs.db" };
+        readonly List<String> ignoreFileList = new List<String>() { ".DS_Store", "._.DS_Store", "desktop.ini", "Thumbs.db" };
 
 
         public Main()
@@ -126,22 +123,14 @@ namespace ImageSorter
                             + currentDate.Day.ToString();
                     String targetPath = targetDirectory + "\\" + currentFilename;
 
-                    if (File.Exists(targetPath)) {
+                    if (File.Exists(targetPath) && FileEquals(currentFilePath, targetPath)) {
 
-                        // TODO - Si fichier doublon -> Logs et pas de copie
-                        // TODO - Si pas fichier doublon -> Changer le nom et copier 
-                        if (FileEquals(currentFilePath, targetPath))
-                        {
+                        // Si fichier doublon -> Logs et pas de copie
                             duplicate++;
-                        } else
-                        {
-                            duplicate++;
-                        }
-
                     }
                     else
                     {
-                        // Sinon, copie du fichier
+                        // Sinon, copie du fichier (si existe déjà, doit être renommé)
                         SecureCopyFile(currentFilePath, targetDirectory, currentFilename);
                         copied++;
                     }
@@ -195,43 +184,48 @@ namespace ImageSorter
 
             String definitiveCopyPath = targetPath + "\\" + filename;
 
+            String tempFilename = Path.GetFileNameWithoutExtension(definitiveCopyPath);
+            String tempFileext = Path.GetExtension(definitiveCopyPath);
+            int duplicateSuffix = 1;
+
+            // Contrôle sur le répertoire
             if (! Directory.Exists(targetPath)) {
                 Directory.CreateDirectory(targetPath);
             }
+
+            // Contrôle si le fichier existe déjà
+            // Si oui, on va boucler jusqu'a trouver un nom libre
+            while (File.Exists(definitiveCopyPath)) {
+                definitiveCopyPath = targetPath + "\\" + tempFilename + "_" + duplicateSuffix + tempFileext;
+                duplicateSuffix++;
+            }
+
 
             File.Copy(sourcePath, definitiveCopyPath);
         }
 
 
-        // This method accepts two strings the represent two files to
-        // compare. A return value of 0 indicates that the contents of the files
-        // are the same. A return value of any other value indicates that the
-        // files are not the same.
+        // Méthode pour comparer si deux fichiers sont identiques.
         private bool FileEquals(string file1, string file2)
         {
 
             byte[] fileContent1 = File.ReadAllBytes(file1);
             byte[] fileContent2 = File.ReadAllBytes(file2);
 
-            // Determine if the same file was referenced two times.
+            // Si ce sont les mêmes fichiers (même chemin) -> retourner vrai
             if (file1 == file2)
             {
-                // Return true to indicate that the files are the same.
                 return true;
             }
 
 
-            // Check the file sizes. If they are not the same, the files
-            // are not the same.
+            // Contrôle de la longueur des fichiers -> Taille différente, retourner faux
             if (fileContent1.Length != fileContent2.Length)
             {
-                // Return false to indicate files are different
                 return false;
             }
 
-            // Read and compare a byte from each file until either a
-            // non-matching set of bytes is found or until the end of
-            // file1 is reached.
+            // Comparaison bit à bit -> Si un bit diffère, retourner faux
             for (int i = 0; i < fileContent1.Length; i++)
             {
                 if (fileContent1[i] != fileContent2[i])
@@ -240,10 +234,7 @@ namespace ImageSorter
                 }
             }
 
-
-            // Return the success of the comparison. "file1byte" is
-            // equal to "file2byte" at this point only if the files are
-            // the same.
+            // Si on arrive ici, les fichiers sont identiques, retourner vrai
             return true;
         }
 
