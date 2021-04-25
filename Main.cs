@@ -68,6 +68,8 @@ namespace ImageSorter
         private void buttonLaunch_Click(object sender, EventArgs e)
         {
             // Méthode principale du tri des photos
+            buttonLaunch.Enabled = false;
+            buttonLaunch.Update();
 
             // Contrôle des paramètres (les deux arborescences ne doivent pas se chevaucher) - Si c'est le cas : message d'erreur et arrêt
             if (!Directory.Exists(textBoxTarget.Text) ||
@@ -116,7 +118,6 @@ namespace ImageSorter
                     DateTime currentDate = currentFile.Properties.System.Photo.DateTaken.Value.GetValueOrDefault(defaultDate);
 
                     // Mise en place du chemin de copie et contrôles.
-
                     String targetDirectory = textBoxTarget.Text + "\\"
                             + currentDate.Year.ToString() + "\\"
                             + currentDate.Month.ToString() + "\\"
@@ -140,6 +141,14 @@ namespace ImageSorter
                 }
 
             }
+
+            // Affichage final
+            buildBoxLogs();
+
+            Application.DoEvents();
+            buttonLaunch.Enabled = true;
+            buttonLaunch.Update();
+
         }
 
         private void textBoxLogs_TextChanged(object sender, EventArgs e)
